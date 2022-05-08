@@ -1,0 +1,126 @@
+CREATE TABLE customer (
+  customerID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  customerEmail VARCHAR(35) UNIQUE,
+  customerPassword VARCHAR(255),
+  customerName VARCHAR(30)
+)
+ALTER TABLE customer AUTO_INCREMENT=10000;
+
+
+
+CREATE TABLE Department(
+    deptID INT NOT NULL PRIMARY KEY,
+    deptName VARCHAR(30) NOT NULL,
+    deptTel VARCHAR(11) NOT NULL,
+    deptEmail VARCHAR(50) NOT NULL
+)
+
+
+CREATE TABLE Manager(
+    managerID INT NOT NULL PRIMARY KEY,
+    managerEmail VARCHAR(50) UNIQUE,
+    managerPassword VARCHAR(255),
+    managerName VARCHAR(30),
+    deptID INT NOT NULL UNIQUE,
+    image LONGBLOB NOT NULL,
+    FOREIGN KEY(deptID)
+    REFERENCES departments(deptID)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+)
+
+
+CREATE TABLE customerPayment(
+    customerID INT,
+    cardNumber VARCHAR(16),
+    saveName VARCHAR(15),
+    expMonth INT(2),
+    expYear INT(4),
+    cvv INT(3),
+    PRIMARY KEY (customerID, cardNumber),
+    UNIQUE(customerID,saveName),
+    FOREIGN KEY (customerID)
+    REFERENCES customer(customerID)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+)
+
+
+CREATE TABLE vehicleBrand(
+    brandName VARCHAR(15) PRIMARY KEY,
+    brandLogo LONGBLOB NOT NULL
+)
+
+CREATE TABLE vehicleType(
+    vehicleTypeID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    brandName VARCHAR(15) NOT NULL,
+    model VARCHAR(15) NOT NULL,
+    carImage LONGBLOB NOT NULL,
+    pricePerDay INT,
+    FOREIGN KEY(brandName)
+    REFERENCES vehiclebrand(brandName)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+)
+
+ALTER TABLE vehicletype AUTO_INCREMENT=100;
+
+
+
+CREATE TABLE car(
+    carID VARCHAR(10) NOT NULL PRIMARY KEY,
+    licensePlate VARCHAR(10) NOT NULL UNIQUE,
+    activationStatus BOOLEAN DEFAULT 1,
+    vehicletypeID INT(4),
+    FOREIGN KEY (vehicletypeID)
+    REFERENCES vehicletype(vehicletypeID)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+)
+
+CREATE TABLE vehicleFeatures(
+    vehicleTypeID INT(4),
+    productYear INT(4),
+    personCapacity INT(2),
+    luggageCapacity INT(2),
+    gearType BOOLEAN DEFAULT 1,
+    cruiseControl BOOLEAN,
+    radio BOOLEAN,
+    airConditioning BOOLEAN,
+    bluetooth BOOLEAN,
+    FOREIGN KEY (vehicletypeID)
+    REFERENCES vehicletype(vehicletypeID)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+)
+
+
+CREATE TABLE reservation(
+    orderRef INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    carID VARCHAR(10),
+    licensePlate VARCHAR(10),
+    customerID INT,
+    dateFrom DATE,
+    dateTo DATE,
+    location VARCHAR(15),
+    totalCost INT,
+    inBasket BOOLEAN DEFAULT 0,
+    FOREIGN KEY (carID)
+    REFERENCES car(carID)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+    FOREIGN KEY (licensePlate)
+    REFERENCES car(licensePlate)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+    FOREIGN KEY (customerID)
+    REFERENCES customer(customerID)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+)
+
+CREATE TABLE userCarRate(
+    customerID INT,
+    carID VARCHAR(10),
+    userRate INT(1)
+)
