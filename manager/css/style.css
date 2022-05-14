@@ -15,9 +15,6 @@ html {
     .navbar-light {
       height: 110px;
     }
-    #cat-user{
-      margin-left: 150px;
-    }
   }
   .navbar-light .navbar-brand {
     font-size: 22px;
