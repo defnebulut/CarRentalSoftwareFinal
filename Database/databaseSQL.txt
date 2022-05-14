@@ -72,6 +72,7 @@ CREATE TABLE car(
     licensePlate VARCHAR(10) NOT NULL UNIQUE,
     activationStatus BOOLEAN DEFAULT 1,
     vehicletypeID INT(4),
+    city VARCHAR(20),
     FOREIGN KEY (vehicletypeID)
     REFERENCES vehicletype(vehicletypeID)
     ON DELETE CASCADE
