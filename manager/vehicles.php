@@ -189,9 +189,9 @@
                         $sql = "SELECT activationStatus FROM car WHERE carID='$carID'";
                         $result = $conn->query($sql);
                         while ($row = $result->fetch_assoc()) {
-                            if($row["activationStatus"] == 1){
+                            if ($row["activationStatus"] == 1) {
                                 $sql = "UPDATE car SET activationStatus='0' WHERE carID='$carID'";
-                            }else{
+                            } else {
                                 $sql = "UPDATE car SET activationStatus='1' WHERE carID='$carID'";
                             }
                         }
@@ -266,9 +266,8 @@
                         <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
                             <div class="table" style="margin-bottom: 30px">
                                 <div class="table-header">
-                                    <div class="header__item"></div>
-                                    <div class="header__item">license plate</div>
                                     <div class="header__item">car id</div>
+                                    <div class="header__item">license plate</div>
                                 </div>
                                 <div class="table-content">
                                     <?php
@@ -277,10 +276,9 @@
                                     while ($row = $result->fetch_assoc()) {
                                         echo '<div class="table-row">
                             <div class="table-data style="width:5px;"><div class="form-check">
-                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" value="' . $row["carID"] . '" style=" margin-left: 60px;">
+                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" value="' . $row["carID"] . '">' . $row["carID"] . '
                           </div></div>        
                             <div class="table-data">' . $row["licensePlate"] . '</div>
-                            <div class="table-data">' . $row["carID"] . '</div>
                             </div>';
                                     }
                                     ?>
