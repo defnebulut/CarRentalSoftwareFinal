@@ -1,6 +1,7 @@
 <?php
-// Start the session
-session_start();
+if (!isset($_SESSION)) {
+    session_start();
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -66,14 +67,12 @@ session_start();
             }
         }
 
-        $_SESSION["name"] = "";
-        $_SESSION["email"] = "";
         if ($notMatchedErr == "") {
-            $sql = "SELECT managerName FROM manager WHERE managerEmail='$email'";
+            $sql = "SELECT managerName,managerEmail FROM manager WHERE managerEmail='$email'";
+            $_SESSION["email"] = $email;
             $result = $conn->query($sql);
             while ($row = $result->fetch_assoc()) {
                 $_SESSION["name"] = $row["managerName"];
-                $_SESSION["email"] = $row["managerEmail"];
             }
             echo "<script> location.href='home.php'; </script>";
         }
