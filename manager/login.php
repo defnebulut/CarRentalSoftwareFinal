@@ -66,12 +66,14 @@ session_start();
             }
         }
 
-
+        $_SESSION["name"] = "";
+        $_SESSION["email"] = "";
         if ($notMatchedErr == "") {
             $sql = "SELECT managerName FROM manager WHERE managerEmail='$email'";
             $result = $conn->query($sql);
             while ($row = $result->fetch_assoc()) {
                 $_SESSION["name"] = $row["managerName"];
+                $_SESSION["email"] = $row["managerEmail"];
             }
             echo "<script> location.href='home.php'; </script>";
         }
