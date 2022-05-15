@@ -73,7 +73,6 @@ CREATE TABLE car(
     activationStatus BOOLEAN DEFAULT 1,
     vehicletypeID INT(4),
     city VARCHAR(20),
-    inBasket BOOLEAN DEFAULT 0,
     FOREIGN KEY (vehicletypeID)
     REFERENCES vehicletype(vehicletypeID)
     ON DELETE CASCADE
@@ -106,7 +105,6 @@ CREATE TABLE reservation(
     customerID INT,
     dateFrom DATE,
     dateTo DATE,
-    location VARCHAR(15),
     totalCost INT,
     FOREIGN KEY (carID)
     REFERENCES car(carID)
