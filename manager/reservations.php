@@ -54,7 +54,7 @@
                         $result = $conn->query($sql);
                         while ($row = $result->fetch_assoc()) {
                             echo '<div class="table-row">
-                            <div class="table-data">' . $row["cutomerID"] . '</div>
+                            <div class="table-data">' . $row["customerID"] . '</div>
                             <div class="table-data">' . $row["orderRef"] . '</div>
                             <div class="table-data">' . $row["licensePlate"] . '</div>
                             <div class="table-data">' . $row["carID"] . '</div>
