@@ -63,8 +63,7 @@ if (!isset($_SESSION)) {
                         </button>
 
                         <ul class="dropdown-menu dropdown-menu-lg-end" style="width: 90%; margin-right: 40px;">
-                            <li><a class="dropdown-item" href="cA+ccountSettings.php">Account Settings</a></li>
-                            <li><a class="dropdown-item" href="paymentSettings.php">Payment Settings</a></li>
+                            <li><a class="dropdown-item" href="cAccountSettings.php">Account Settings</a></li>
                             <li><a class="dropdown-item" href="myReservations.php">My Reservations</a></li>
                             <li><a class="dropdown-item">
                                     <form action="customerMain.php" method="post">

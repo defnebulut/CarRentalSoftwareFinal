@@ -60,11 +60,12 @@ if (!isset($_SESSION)) {
         }
 
         if ($notMatchedErr == "") {
-            $sql = "SELECT customerName,customerEmail FROM customer WHERE customerEmail='$email'";
+            $sql = "SELECT CustomerID,customerName,customerEmail FROM customer WHERE customerEmail='$email'";
             $_SESSION["email"] = $email;
             $result = $conn->query($sql);
             while ($row = $result->fetch_assoc()) {
                 $_SESSION["name"] = $row["customerName"];
+                $_SESSION["customerID"] = $row["CustomerID"];
             }
             $_SESSION["loggedIn"]=1;
             echo "<script> location.href='customerMain.php'; </script>";
