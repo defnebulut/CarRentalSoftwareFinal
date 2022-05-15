@@ -68,16 +68,19 @@ ALTER TABLE vehicletype AUTO_INCREMENT=100;
 
 
 CREATE TABLE car(
-    carID VARCHAR(10) NOT NULL PRIMARY KEY,
-    licensePlate VARCHAR(10) NOT NULL UNIQUE,
+    carID INT(5) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    licensePlate VARCHAR(15) NOT NULL UNIQUE,
     activationStatus BOOLEAN DEFAULT 1,
     vehicletypeID INT(4),
     city VARCHAR(20),
+    inBasket BOOLEAN DEFAULT 0,
     FOREIGN KEY (vehicletypeID)
     REFERENCES vehicletype(vehicletypeID)
     ON DELETE CASCADE
     ON UPDATE CASCADE
 )
+ALTER TABLE car AUTO_INCREMENT=5000;
+
 
 CREATE TABLE vehicleFeatures(
     vehicleTypeID INT(4),
@@ -98,14 +101,13 @@ CREATE TABLE vehicleFeatures(
 
 CREATE TABLE reservation(
     orderRef INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    carID VARCHAR(10),
+    carID INT(5),
     licensePlate VARCHAR(10),
     customerID INT,
     dateFrom DATE,
     dateTo DATE,
     location VARCHAR(15),
     totalCost INT,
-    inBasket BOOLEAN DEFAULT 0,
     FOREIGN KEY (carID)
     REFERENCES car(carID)
     ON DELETE CASCADE
