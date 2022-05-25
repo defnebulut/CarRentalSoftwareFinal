@@ -63,20 +63,7 @@ if (!isset($_SESSION)) {
 </head>
 
 <body>
-    <?php
-    $servername = "localhost";
-    $username = "root";
-    $password = null;
-    $dbname = "daphnerental";
-
-    // Create connection
-    $conn = new mysqli($servername, $username, $password, $dbname);
-    // Check connection
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-    }
-
-    ?>
+    <?php include "dbConfig.php" ?>
     <?php
     $emailManager =  $_SESSION["email"];
     $result = $conn->query("SELECT image FROM manager WHERE managerEmail ='$emailManager'");
@@ -148,9 +135,9 @@ if (!isset($_SESSION)) {
                     </div>
                     <div class="col-6" style="margin-top: 5%;">
                         <?php if ($result->num_rows > 0) { ?>
-                            <?php while ($row = $result->fetch_assoc()) { ?>
-                                <img src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($row['image']); ?>" style="width:250px; height:auto;" alt="user photo" />
-                            <?php } ?>
+                            <?php while ($row = $result->fetch_assoc()) {
+                                echo '<img src="../Images/Managers/' . $row["image"] . '" style="width:250px; height:auto; margin-left:60px;">';
+                            } ?>
                         <?php } else { ?>
                             <p class="status error">Image not found...</p>
                         <?php } ?>

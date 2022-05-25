@@ -12,19 +12,8 @@
 </head>
 
 <body>
+    <?php include "dbConfig.php" ?>
     <?php
-    $servername = "localhost";
-    $username = "root";
-    $password = null;
-    $dbname = "daphnerental";
-
-    // Create connection
-    $conn = new mysqli($servername, $username, $password, $dbname);
-    // Check connection
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-    }
-
     $sql = "SELECT COUNT(*) FROM car;";
     $result = $conn->query($sql);
     while ($row = $result->fetch_assoc()) {
@@ -34,6 +23,12 @@
     $result = $conn->query($sql);
     while ($row = $result->fetch_assoc()) {
         $customerCount = $row["COUNT(*)"];
+    }
+
+    $sql = "SELECT COUNT(*) FROM reservation;";
+    $result = $conn->query($sql);
+    while ($row = $result->fetch_assoc()) {
+        $reservationCount = $row["COUNT(*)"];
     }
     $sql = "SELECT SUM(totalCost) FROM reservation;";
     $result = $conn->query($sql);
@@ -53,7 +48,7 @@
                 <div class="col">
                     <div class="p-3 border bg-light">
                         <i class="fa-solid fa-users fa-2x" style="color: black;"></i>
-                        <?php echo $customerCount; ?>
+                        &emsp; &emsp;<?php echo $customerCount; ?>
                         &emsp; MEMBERS
                     </div>
                 </div>
@@ -81,8 +76,8 @@
                 </div>
                 <canvas id="myChart" style="width:100%;max-width:600px; margin:80px 0 0 300px"></canvas>
                 <script>
-                    var yValues = ['<?=$customerCount?>','<?=$income?>','<?=$carCount?>']
-                    var xValues = ["Member", "Income", "Cars"];
+                    var yValues = ["<?= $customerCount ?>", "<?= $reservationCount ?>", "<?= $carCount ?>","<?= $customerCount ?>"-2];
+                    var xValues = ["Member", "Reservations", "Cars"];
                     var barColors = ["red", "green", "blue"];
                     new Chart("myChart", {
                         type: "bar",

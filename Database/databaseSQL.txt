@@ -2,7 +2,8 @@ CREATE TABLE customer (
   customerID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   customerEmail VARCHAR(35) UNIQUE,
   customerPassword VARCHAR(255),
-  customerName VARCHAR(30)
+  customerName VARCHAR(30),
+  regDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 )
 ALTER TABLE customer AUTO_INCREMENT=10000;
 
@@ -84,8 +85,7 @@ ALTER TABLE car AUTO_INCREMENT=5000;
 CREATE TABLE vehicleFeatures(
     vehicleTypeID INT(4),
     productYear INT(4),
-    personCapacity INT(2),
-    luggageCapacity INT(2),
+    carSize varchar(6) enum("small","medium","large"),
     gearType BOOLEAN DEFAULT 1,
     cruiseControl BOOLEAN,
     radio BOOLEAN,
@@ -101,17 +101,13 @@ CREATE TABLE vehicleFeatures(
 CREATE TABLE reservation(
     orderRef INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     carID INT(5),
-    licensePlate VARCHAR(10),
     customerID INT,
     dateFrom DATE,
     dateTo DATE,
     totalCost INT,
+    resDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (carID)
     REFERENCES car(carID)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE,
-    FOREIGN KEY (licensePlate)
-    REFERENCES car(licensePlate)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
     FOREIGN KEY (customerID)

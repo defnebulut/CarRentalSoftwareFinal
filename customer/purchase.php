@@ -15,31 +15,15 @@ if (!isset($_SESSION)) {
 </head>
 
 <body>
+    <?php include "customerNavbar.php"; ?>
+    <?php include "dbConfig.php" ?>
     <?php
-    $servername = "localhost";
-    $username = "root";
-    $password = null;
-    $dbname = "daphnerental";
-
-    // Create connection
-    $conn = new mysqli($servername, $username, $password, $dbname);
-    // Check connection
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-    }
-    ?>
-    <?php
+    $carid = $_SESSION["carID"];
+    $carCity = $_SESSION["location"];
     $pDate = $_SESSION["pdate"];
     $rDate = $_SESSION["rdate"];
     $custID = $_SESSION["customerID"];
-    $carID = $_SESSION["cID"];
-    $total = $_SESSION["total"];
     $name = $dL = $cN = $exp = $cvv = "";
-    $sql = "SELECT licensePlate FROM car WHERE carID='$carID'";
-    $result = $conn->query($sql);
-    while ($row = $result->fetch_assoc()) {
-        $lic = $row["licensePlate"];
-    }
     if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit_6'])) {
         if (isset($_POST['submit_6'])) {
             $name = $_POST["name"];
@@ -47,7 +31,7 @@ if (!isset($_SESSION)) {
             $exp = $_POST["exp"];
             $cvv = $_POST["cvv"];
 
-            $sql = "INSERT INTO reservation (carID,licensePlate,customerID, dateFrom,dateTo,totalCost) VALUES ('$carID','$lic','$custID', '$pDate','$rDate','$total')";
+            $sql = "INSERT INTO reservation (carID,customerID, dateFrom,dateTo,totalCost) VALUES ('$carid','$custID', '$pDate','$rDate','0')";
             if (mysqli_query($conn, $sql)) {
                 echo "<script>alert('Reservation completed succesfuly !')</script>";
                 echo "<script> location.href='myReservations.php'; </script>";
@@ -59,7 +43,6 @@ if (!isset($_SESSION)) {
         }
     }
     ?>
-    <?php include "customerNavbar.php"; ?>
     <div class="container1" style="margin-left: 10px; text-align: center;">
         <div class="row" style="margin-top:0px;">
             <div class="col" id="past-res">
@@ -115,7 +98,7 @@ if (!isset($_SESSION)) {
                         <input class="form-control mb-3 pt-2" name="cvv" type="text-i" placeholder="***" required />
                     </div>
                 </div>
-                <input type="submit" name="submit_6" value="PAY $<?php echo $total ?>" class="sear-btn" style="margin-top:50px">
+                <input type="submit" name="submit_6" value="PAY $0" class="sear-btn" style="margin-top:50px">
             </form>
         </div>
     </div>

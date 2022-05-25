@@ -40,33 +40,43 @@
             opacity: 0.75;
         }
 
+        .ad-btn2 {
+            text-transform: uppercase;
+            width: 60%;
+            height: 40px;
+            border-radius: 80px;
+            font-size: 16px;
+            line-height: 35px;
+            text-align: center;
+            border: 3px solid black;
+            display: block;
+            text-decoration: none;
+            margin: 1px auto 1px auto;
+            color: whitesmoke;
+            overflow: hidden;
+            position: relative;
+            background-color: black;
+        }
+
+        .ad-btn2:hover {
+            color: #1e1717;
+            border: 2px solid black;
+            background: transparent;
+            transition: all 0.3s ease;
+            box-shadow: 12px 15px 20px 0px rgba(46, 61, 73, 0.15);
+        }
+
         select {
             background-color: rgba(0, 0, 0, 0.875);
             color: whitesmoke;
             height: 50px;
-            width: auto;
-        }
-
-        option:hover {
-            background-color: red;
+            width: 180px;
         }
     </style>
 </head>
 
 <body>
-    <?php
-    $servername = "localhost";
-    $username = "root";
-    $password = null;
-    $dbname = "daphnerental";
-
-    // Create connection
-    $conn = new mysqli($servername, $username, $password, $dbname);
-    // Check connection
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-    }
-    ?>
+    <?php include "dbConfig.php" ?>
     <?php include "navbar.php"; ?>
     <div class="row g-0">
         <div class="col-6 col-md-2" style="background-color:  #8f92962f; display: inline;">
@@ -75,7 +85,7 @@
 
         <div class="col-sm-6 col-md-8">
             <h2 style="text-align: center; margin: 100px 0 40px 0">VEHICLES</h2>
-            <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist" style="margin: auto">
+            <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist" style="margin: auto;margin-left:50px; margin-bottom:10px">
                 <li class="nav-item" role="presentation">
                     <button class="nav-link active" id="pills-a-tab" data-bs-toggle="pill" data-bs-target="#pills-a" type="button" role="tab" aria-controls="pills-a" aria-selected="true">
                         See Cars
@@ -147,7 +157,6 @@
                     $licensePlate = test_input($_POST["licensePlate"]);
                     $city = test_input($_POST["city"]);
                     $vehicletypeID = test_input($_POST["brand"]);
-
                     $sql = "SELECT licensePlate FROM car WHERE licensePlate='$licensePlate'";
                     $result = $conn->query($sql);
                     if ($result->num_rows != 0) {
@@ -168,42 +177,6 @@
                             mysqli_close($conn);
                         }
                     }
-                } else if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit_2'])) {
-                    $carID = test_input($_POST['flexRadioDefault']);
-                    if (isset($_POST['submit_2'])) {
-                        $carID = $_POST['flexRadioDefault'];
-                        $sql = "DELETE FROM car WHERE carID='$carID'";
-                        if (mysqli_query($conn, $sql)) {
-                            echo "<script>alert('Record deleted succesfully!')</script>";
-                            echo "<script> location.href='vehicles.php'; </script>";
-                        } else {
-                            echo "<script>alert('An error has occured!')</script>";
-                            echo "<script> location.href='vehicles.php'; </script>";
-                        }
-                        mysqli_close($conn);
-                    }
-                } else if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit_3'])) {
-                    $carID = test_input($_POST['flexRadioDefault']);
-                    if (isset($_POST['submit_3'])) {
-                        $carID = $_POST['flexRadioDefault'];
-                        $sql = "SELECT activationStatus FROM car WHERE carID='$carID'";
-                        $result = $conn->query($sql);
-                        while ($row = $result->fetch_assoc()) {
-                            if ($row["activationStatus"] == 1) {
-                                $sql = "UPDATE car SET activationStatus='0' WHERE carID='$carID'";
-                            } else {
-                                $sql = "UPDATE car SET activationStatus='1' WHERE carID='$carID'";
-                            }
-                        }
-                        if (mysqli_query($conn, $sql)) {
-                            echo "<script>alert('Record updated succesfully!')</script>";
-                            echo "<script> location.href='vehicles.php'; </script>";
-                        } else {
-                            echo "<script>alert('An error has occured!')</script>";
-                            echo "<script> location.href='vehicles.php'; </script>";
-                        }
-                        mysqli_close($conn);
-                    }
                 }
                 function test_input($data)
                 {
@@ -223,10 +196,11 @@
                                         <label class="form-label" for="licensePlate">LICENSE PLATE*</label>
                                         <input class="form-control" name="licensePlate" id="licensePlate" type="text" placeholder="XXXXX-00-XXXX" autocomplete="off" required />
                                     </div>
-
-                                    <div class="btn-group" style="margin-top: 30px;">
+                                    <label class="form-label" for="brandModel" style="margin-top: 8px;">Brand&Model*</label>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+                                    <label class="form-label" for="City" style="margin-top: 8px;">City*</label>
+                                    <br>
+                                    <div class="btn-group" style="margin-top: 3px;">
                                         <select name="brand">
-                                            <option value="">--- Choose brand&model ---</option>
                                             <?php
                                             $sql = "SELECT vehicletypeID,brandName,model FROM vehicletype ORDER BY brandName,model";
                                             $result = $conn->query($sql);
@@ -237,18 +211,12 @@
                                             ?>
                                         </select>
                                         <select name="city" id="city" style="margin-left: 40px">
-                                            <script>
-                                                const cities = [
-                                                    '--- Choose a city ---', 'Istanbul', 'Ankara', 'Izmir', 'Antalya', 'Bursa', 'Eskisehir'
-                                                ]
-                                                var select = document.getElementById('city');
-                                                for (var i = 0; i < cities.length; i++) {
-                                                    var opt = document.createElement('option');
-                                                    opt.value = cities[i];
-                                                    opt.innerHTML = cities[i];
-                                                    select.appendChild(opt);
-                                                }
-                                            </script>
+                                            <option value="Istanbul">Istanbul</option>
+                                            <option value="Ankara">Ankara</option>
+                                            <option value="Izmir">Izmir</option>
+                                            <option value="Antalya">Antalya</option>
+                                            <option value="Bursa">Bursa</option>
+                                            <option value="Eskisehir">Eskisehir</option>
                                         </select>
                                     </div>
                                     <input type="submit" name="submit_1" value="ADD">
@@ -263,29 +231,26 @@
                         <button type="submit"><i class="fa fa-search"></i></button>
                     </form>
                     <div class="container1" style="margin-top: 5%;">
-                        <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-                            <div class="table" style="margin-bottom: 30px">
-                                <div class="table-header">
-                                    <div class="header__item">car id</div>
-                                    <div class="header__item">license plate</div>
-                                </div>
-                                <div class="table-content">
-                                    <?php
-                                    $sql = "SELECT * FROM car";
-                                    $result = $conn->query($sql);
-                                    while ($row = $result->fetch_assoc()) {
-                                        echo '<div class="table-row">
-                            <div class="table-data style="width:5px;"><div class="form-check">
-                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" value="' . $row["carID"] . '">' . $row["carID"] . '
-                          </div></div>        
-                            <div class="table-data">' . $row["licensePlate"] . '</div>
-                            </div>';
-                                    }
-                                    ?>
-                                </div>
+                        <div class="table" style="margin-bottom: 30%">
+                            <div class="table-header">
+                                <div class="header__item">car id</div>
+                                <div class="header__item">license plate</div>
+                                <div class="header__item"></div>
                             </div>
-                            <input type="submit" name="submit_2" value="DELETE" style="margin-bottom:30%">
-                        </form>
+                            <div class="table-content">
+                                <?php
+                                $sql = "SELECT * FROM car";
+                                $result = $conn->query($sql);
+                                while ($row = $result->fetch_assoc()) {
+                                    echo '<div class="table-row">
+                                        <div class="table-data">' . $row["carID"] . '</div>                 
+                            <div class="table-data">' . $row["licensePlate"] . '</div>
+                            <div class="table-data"><a class="ad-btn2" href="deleteCar.php?id=' . $row["carID"] . '">Delete</a></div>
+                            </div>';
+                                }
+                                ?>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
@@ -294,39 +259,36 @@
                         <button type="submit"><i class="fa fa-search"></i></button>
                     </form>
                     <div class="container1" style="margin-top: 5%;">
-                        <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-                            <div class="table">
-                                <div class="table-header">
-                                    <div class="header__item"></div>
-                                    <div class="header__item">license plate</div>
-                                    <div class="header__item">car id</div>
-                                    <div class="header__item">status</div>
-                                    <div class="header__item">price</div>
-                                </div>
-                                <div class="table-content">
-                                    <?php
-                                    $sql = "SELECT c.licensePlate,c.carID,c.activationStatus,v.pricePerDay FROM car c,vehicletype v WHERE c.vehicletypeID=v.vehicletypeID;";
-                                    $result = $conn->query($sql);
-                                    while ($row = $result->fetch_assoc()) {
-                                        $isActive = "Active";
-                                        if ($row["activationStatus"] == 0) {
-                                            $isActive = "Deactive";
-                                        }
-                                        echo '<div class="table-row">
-                                    <div class="table-data style="width:5px;"><div class="form-check">
-                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" value="' . $row["carID"] . '" style=" margin-left: 60px;">
-                          </div></div>
+                        <div class="table" style="margin-bottom:30% ;">
+                            <div class="table-header">
+                                <div class="header__item">license plate</div>
+                                <div class="header__item">car id</div>
+                                <div class="header__item">status</div>
+                                <div class="header__item">price</div>
+                                <div class="header__item"></div>
+                            </div>
+                            <div class="table-content">
+                                <?php
+                                $sql = "SELECT c.licensePlate,c.carID,c.activationStatus,v.pricePerDay FROM car c,vehicletype v WHERE c.vehicletypeID=v.vehicletypeID;";
+                                $result = $conn->query($sql);
+                                while ($row = $result->fetch_assoc()) {
+                                    $isActive = "Active";
+                                    $buttonText = "Deactivate";
+                                    if ($row["activationStatus"] == 0) {
+                                        $isActive = "Deactive";
+                                        $buttonText = "Activate";
+                                    }
+                                    echo '<div class="table-row">
                             <div class="table-data">' . $row["licensePlate"] . '</div>
                             <div class="table-data">' . $row["carID"] . '</div>
                             <div class="table-data">' . $isActive . '</div>
                             <div class="table-data">' . $row["pricePerDay"] . '</div>
+                            <div class="table-data"><a class="ad-btn2" href="updateStatus.php?id=' . $row["carID"] . '">' . $buttonText . '</a></div>
                             </div>';
-                                    }
-                                    ?>
-                                </div>
+                                }
+                                ?>
                             </div>
-                            <input type="submit" name="submit_3" value="ACTIVATE/DEACTIVATE" style="margin-bottom:30%">
-                        </form>
+                        </div>
                     </div>
                 </div>
             </div>

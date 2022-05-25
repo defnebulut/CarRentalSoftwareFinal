@@ -52,8 +52,7 @@ if (!isset($_SESSION)) {
 
         #pass-sett {
             margin-left: 50px;
-            width: 45%;
-            margin-bottom: 300px;
+            margin-bottom: 20px;
         }
 
         #acc-sett {
@@ -63,20 +62,7 @@ if (!isset($_SESSION)) {
 </head>
 
 <body>
-    <?php
-    $servername = "localhost";
-    $username = "root";
-    $password = null;
-    $dbname = "daphnerental";
-
-    // Create connection
-    $conn = new mysqli($servername, $username, $password, $dbname);
-    // Check connection
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-    }
-
-    ?>
+    <?php include "dbConfig.php" ?>
     <?php
     $email =  $_SESSION["email"];
     $password = $repassword = "";
@@ -113,11 +99,11 @@ if (!isset($_SESSION)) {
     <h2 style="text-align: center; margin: 70px 0 40px 10px">ACCOUNT DETAILS</h2>
     <div class="container">
         <div class="row">
-            <div class="col-6" style="margin-top: 5%;">
+            <div class="col-6" style="margin-top: 5%;  margin-left: auto; margin-right: auto;">
                 <form action="accountSettings.html" id="acc-sett">
                     <div class="mb-3">
                         <label class="form-label" for="name">NAME SURNAME</label>
-                        <input class="form-control" id="name" type="text" placeholder="<?php echo $_SESSION['name'] ?>" disabled />
+                        <input class="form-control" id="name" type="text" placeholder="<?php echo $_SESSION['customerName'] ?>" disabled />
                     </div>
                     <div class="mb-3">
                         <label class="form-label" for="email">Email</label>
@@ -126,22 +112,27 @@ if (!isset($_SESSION)) {
                 </form>
             </div>
         </div>
+        <br><br>
+        <hr>
+        <div class="row">
+            <div class="col-6" style="margin-left: auto; margin-right: auto;">
+                <h3 style="margin: 40px 0 30px 50px">Password Settings</h3>
+                <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" id="pass-sett">
+                    <div class="mb-3">
+                        <label class="form-label" for="password">New Password</label>
+                        <input class="form-control" name="password" id="password" type="password" placeholder="*****" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="repassword">Repassword</label>
+                        <input class="form-control" name="repassword" id="repassword" type="password" placeholder="*****" required>
+                    </div>
+                    <div class="d-grid">
+                        <input type="submit" name="submit_10" value="SAVE">
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
-    <hr>
-    <h3 style="margin: 40px 0 30px 50px">Password Settings</h3>
-    <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" id="pass-sett">
-        <div class="mb-3">
-            <label class="form-label" for="password">New Password</label>
-            <input class="form-control" name="password" id="password" type="password" placeholder="*****" required>
-        </div>
-        <div class="mb-3">
-            <label class="form-label" for="repassword">Repassword</label>
-            <input class="form-control" name="repassword" id="repassword" type="password" placeholder="*****" required>
-        </div>
-        <div class="d-grid">
-            <input type="submit" name="submit_10" value="SAVE">
-        </div>
-    </form>
 
     <?php include "customerFooter.php"; ?>
     <script src="../manager/js/main.js"></script>

@@ -11,19 +11,7 @@
 </head>
 
 <body>
-    <?php
-    $servername = "localhost";
-    $username = "root";
-    $password = null;
-    $dbname = "daphnerental";
-
-    // Create connection
-    $conn = new mysqli($servername, $username, $password, $dbname);
-    // Check connection
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-    }
-    ?>
+    <?php include "dbConfig.php" ?>
     <?php include "navbar.php"; ?>
     <div class="row g-0">
         <div class="col-6 col-md-2" style="background-color:  #8f92962f; display: inline;">
@@ -45,9 +33,9 @@
                         $result = $conn->query($sql);
                         while ($row = $result->fetch_assoc()) {
                             echo '<div class="table-row">
-                            <div class="table-data">' . $row["deptName"] .'</div>
-                            <div class="table-data">' . $row["deptTel"] .'</div>
-                            <div class="table-data">' . $row["deptEmail"] .'</div>
+                            <div class="table-data">' . $row["deptName"] . '</div>
+                            <div class="table-data">' . $row["deptTel"] . '</div>
+                            <div class="table-data">' . $row["deptEmail"] . '</div>
                             </div>
                             ';
                         }

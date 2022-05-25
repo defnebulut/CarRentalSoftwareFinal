@@ -48,16 +48,11 @@ if (!isset($_SESSION)) {
                     </li>
                 </ul>
                 <?php
-                if ($_SERVER["REQUEST_METHOD"] == "POST"  && isset($_POST['submit_2'])) {
-                    $_SESSION["loggedIn"] = 0;
-                }
-                ?>
-                <?php
                 if ($_SESSION["loggedIn"] == 1) { ?>
                     <div class="btn-group">
                         <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
                             <?php
-                            echo $_SESSION['name'];
+                            echo $_SESSION['customerName'];
                             ?>
                             <i class="fa-solid fa-circle-user" style="margin-left: 5px;"></i>
                         </button>
@@ -66,10 +61,11 @@ if (!isset($_SESSION)) {
                             <li><a class="dropdown-item" href="cAccountSettings.php">Account Settings</a></li>
                             <li><a class="dropdown-item" href="myReservations.php">My Reservations</a></li>
                             <li><a class="dropdown-item">
-                                    <form action="customerMain.php" method="post">
-                                        <i class="fa-solid fa-right-from-bracket" style="margin-left: 10px;"></i>
-                                        <input type="submit" name="submit_2" value="Log Out">
-                                    </form>
+                                    <?php
+                                    echo '<a href="logOut.php?login=0" style="color:black;">
+                                    <i class="fa-solid fa-right-from-bracket" style="margin-left: 25px;"></i>
+                                    Log Out</a>';
+                                     ?>
                                 </a></li>
                         </ul>
                     </div>

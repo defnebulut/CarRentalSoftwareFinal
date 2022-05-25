@@ -14,28 +14,15 @@ if (!isset($_SESSION)) {
 </head>
 
 <body>
+    <?php include "dbConfig.php" ?>
     <?php
-    $servername = "localhost";
-    $username = "root";
-    $password = null;
-    $dbname = "daphnerental";
-
-    // Create connection
-    $conn = new mysqli($servername, $username, $password, $dbname);
-    // Check connection
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-    }
-    ?>
-    <?php
-    $pdate = $rdate = $location = $carType = "";
+    $pdate = $rdate = $location = "";
     if ($_SERVER["REQUEST_METHOD"] && isset($_POST['submit_1'])) {
         $pdate = test_input($_POST["pdate"]);
         $rdate = test_input($_POST["rdate"]);
         $location = test_input($_POST["city"]);
-        $carType = test_input($_POST["brand"]);
         $date_now = date("Y-m-d");
-        if($location=="--- Choose a city ---"){
+        if ($location == "--- Choose a city ---") {
             echo "<script>alert('Please select a city!')</script>";
         } else if ($pdate > $rdate) {
             echo "<script>alert('Return date must be greater than pick-up date!')</script>";
@@ -46,14 +33,9 @@ if (!isset($_SESSION)) {
                 $pdate = $_POST["pdate"];
                 $rdate = $_POST["rdate"];
                 $location = $_POST["city"];
-                $carType = $_POST["brand"];
-                if($carType=="All Vehicles"){
-                    $carType = "*";
-                }
                 $_SESSION["pdate"] = $pdate;
                 $_SESSION["rdate"] = $rdate;
                 $_SESSION["location"] = $location;
-                $_SESSION["type"] = $carType;
                 echo "<script> location.href='reservation.php'; </script>";
             }
         }
@@ -100,17 +82,6 @@ if (!isset($_SESSION)) {
                             </div>
                         </div>
                         <div class="col-6 col-md-6">
-                            <h4>Car Brand(optional)</h4>
-                            <select name="brand">
-                                <option value="" selected>All Vehicles</option>
-                                <?php
-                                $sql = "SELECT brandName FROM vehicleBrand ORDER BY brandName";
-                                $result = $conn->query($sql);
-                                while ($row = $result->fetch_assoc()) {
-                                    echo '<option value="' . $row["brandName"] . '">' . $row["brandName"] . '</option>';
-                                }
-                                ?>
-                            </select>
                             <input type="submit" name="submit_1" value="SEARCH" class="sear-btn ">
                         </div>
                     </div>

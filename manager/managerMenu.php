@@ -12,6 +12,7 @@
         <a class="mang-menu" href="departments.php">Departments</a>
         <a class="mang-menu" href="reservations.php">Reservations</a>
         <a class="mang-menu" href="vehicles.php">Vehicles</a>
+        <a class="mang-menu" href="models.php">Models</a>
     </div>
 </body>
 </html>

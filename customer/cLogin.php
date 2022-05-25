@@ -15,20 +15,7 @@ if (!isset($_SESSION)) {
 </head>
 
 <body>
-    <?php
-    $servername = "localhost";
-    $username = "root";
-    $password = null;
-    $dbname = "daphnerental";
-
-    // Create connection
-    $conn = new mysqli($servername, $username, $password, $dbname);
-    // Check connection
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-    }
-
-    ?>
+    <?php include "dbConfig.php" ?>
     <?php
     // define variables and set to empty values
     $email = $password = "";
@@ -64,13 +51,13 @@ if (!isset($_SESSION)) {
             $_SESSION["email"] = $email;
             $result = $conn->query($sql);
             while ($row = $result->fetch_assoc()) {
-                $_SESSION["name"] = $row["customerName"];
+                $_SESSION["customerName"] = $row["customerName"];
                 $_SESSION["customerID"] = $row["CustomerID"];
             }
-            $_SESSION["loggedIn"]=1;
+            $_SESSION["loggedIn"] = 1;
             echo "<script> location.href='customerMain.php'; </script>";
-        }else{
-            $_SESSION["loggedIn"]=0;
+        } else {
+            $_SESSION["loggedIn"] = 0;
         }
     }
 

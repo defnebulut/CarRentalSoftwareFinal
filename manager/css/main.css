@@ -115,37 +115,11 @@ input[type="text"] {
 .tab-content {
   margin-left: 50px;
 }
-#pills-a-tab{
-  margin-left: 50px;
+#pills-profile-tab,#pills-contact-tab, #pills-home-tab,#pills-a-tab,#pills-x-tab{
   background-color: rgb(199, 199, 199);
   color: black;
 }
-#pills-home-tab {
-  background-color: rgb(199, 199, 199);
-  color: black;
-}
-#pills-profile-tab {
-  background-color: rgb(199, 199, 199);
-  color: black;
-}
-#pills-contact-tab {
-  background-color: rgb(199, 199, 199);
-  color: black;
-}
-#pills-a-tab:focus {
-  background-color: black;
-  color: whitesmoke;
-}
-#pills-home-tab:focus {
-  background-color: black;
-  color: whitesmoke;
-}
-
-#pills-profile-tab:focus {
-  background-color: black;
-  color: whitesmoke;
-}
-#pills-contact-tab:focus {
+#pills-a-tab:focus,#pills-home-tab:focus,#pills-profile-tab:focus,#pills-contact-tab:focus,#pills-x-tab:focus {
   background-color: black;
   color: whitesmoke;
 }

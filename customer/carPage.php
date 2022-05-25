@@ -19,21 +19,9 @@ if (!isset($_SESSION)) {
 <script src="../manager/js/main.js"></script>
 
 <body>
+    <?php include "dbConfig.php" ?>
     <?php
-    $servername = "localhost";
-    $username = "root";
-    $password = null;
-    $dbname = "daphnerental";
-
-    // Create connection
-    $conn = new mysqli($servername, $username, $password, $dbname);
-    // Check connection
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-    }
-    ?>
-    <?php
-    $carId = $_SESSION["vid"];
+    $carId = $_GET["id"];
     $sql = "SELECT vt.vehicletypeID,vt.brandName,vt.model,vt.pricePerDay,vt.carImage,vf.*
     FROM vehicletype vt, vehiclefeatures vf
     WHERE vt.vehicletypeID = vf.vehicleTypeID AND vt.vehicletypeID='$carId'";
@@ -45,7 +33,9 @@ if (!isset($_SESSION)) {
         ?> </h2>
     <div class="flex-container">
         <div class="left-item">
-            <img src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($row['carImage']); ?>" alt="car photo" />
+            <?php
+            echo '<img src="../Images/Cars/' . $row["carImage"] . '" style="width:700px; height:auto; margin-left:160px">';
+             ?>
         </div>
         <div class="right-item">
             <table class="table">
@@ -66,7 +56,7 @@ if (!isset($_SESSION)) {
                     </tr>
                     <tr>
                         <th scope="row">
-                            <i class="fa-solid fa-gear fa-2x" style="color: grey"></i>
+                            <i class="fa-solid fa-gears fa-2x" style="color: grey"></i>
                         </th>
                         <td><?php
                             $gear = "Automatic";
@@ -75,15 +65,9 @@ if (!isset($_SESSION)) {
                     </tr>
                     <tr>
                         <th scope="row">
-                            <i class="fa-solid fa-person fa-2x" style="color: grey;"></i>
+                            Size
                         </th>
-                        <td><?php echo $row["personCapacity"] ?> people</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">
-                            <i class="fa-solid fa-suitcase fa-2x" style="color: grey;"></i>
-                        </th>
-                        <td scope="row"><?php echo $row["luggageCapacity"] ?> bags</td>
+                        <td><?php echo $row["carSize"] ?></td>
                     </tr>
                     <tr>
                         <th scope="row">
