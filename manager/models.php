@@ -61,10 +61,11 @@
                                 $sql = "SELECT * FROM vehicleType WHERE 1 ORDER BY brandName ASC,model ASC";
                                 $result = $conn->query($sql);
                                 while ($row = $result->fetch_assoc()) {
+                                    $row["carImage"] = "CARS" . $row["carImage"];
                                     echo '<div class="table-row">
                                     <div class="table-data">' . $row["brandName"] . '</div>
                                     <div class="table-data">' . $row["model"] . '</div>
-                                    <div class="table-data"> <img src="../Images/Cars/' . $row["carImage"] . '" style="width:200px; height:auto;">  </div>
+                                    <div class="table-data"> <img src="../Images/' . $row["carImage"] . '" style="width:200px; height:auto;">  </div>
                                     <div class="table-data">' . $row["pricePerDay"] . '</div>
                                     </div>';
                                 }
@@ -97,7 +98,13 @@
                                         <label class="form-label" for="pYear">PRODUCT YEAR*</label>
                                         <input class="form-control" name="pYear" id="pyear" type="text" placeholder="XXXXX" autocomplete="off" required style="margin-bottom:30px" />
                                         <label class="form-label" for="size">SIZE*</label>
-                                        <input class="form-control" name="size" id="size" type="text" placeholder="XXXXX" autocomplete="off" required style="margin-bottom:30px" />
+                                        <br>
+                                        <select name="size">
+                                            <option value="small">Small</option>
+                                            <option value="medium">Medium</option>
+                                            <option value="large">Large</option>
+                                        </select>
+                                        <br><br>
                                         <label class="form-label" for="price">PRICE PER DAY*</label>
                                         <input class="form-control" name="price" id="price" type="text" placeholder="XXXXX" autocomplete="off" required style="margin-bottom:30px" />
                                         <label class="form-label" for="carImage">CAR IMAGE*</label>
@@ -173,31 +180,55 @@
                             echo "<script> location.href='models.php'; </script>";
                         } else {
                             $pricePerDay = $_POST["price"];
+                            $pricePerDay = (int)$pricePerDay;
                             $brand = $_POST["brand"];
                             $model = $_POST["model"];
+                            $model = strtoupper($model);
                             $pYear = $_POST["pYear"];
-                            $size = $_POST["size"];
-                            $gear = $_POST["gear"];
-                            if ($gear == 2) $gear = 0;
-                            $cCont = $_POST["cruiseControl"];
-                            if ($cCont == 2) $cCont = 0;
-                            $radio = $_POST["radio"];
-                            if ($radio == 2) $radio = 0;
-                            $airCon = $_POST["airConditioning"];
-                            if ($airCon == 2) $airCon = 0;
-                            $bluetooth = $_POST["bluetooth"];
-                            if ($bluetooth == 2) $bluetooth = 0;
-
-                            $sql = "INSERT INTO vehicletype(brandName,model,pricePerDay,carImage)
-                                    VALUES ('$brand','$model','$pricePerDay','$image')";
-                            if (mysqli_query($conn, $sql)) {
-                                echo "<script>alert('New record has been added successfully !')</script>";
+                            $pYear = (int)$pYear;
+                            if ($pricePerDay == 0 || $pYear == 0) {
+                                echo "<script>alert('Invalid entry!')</script>";
                                 echo "<script> location.href='models.php'; </script>";
                             } else {
-                                echo "<script>alert('An error has occured!')</script>";
-                                echo "<script> location.href='models.php'; </script>";
+                                $size = $_POST["size"];
+                                $gear = $_POST["gear"];
+                                if ($gear == 2) $gear = 0;
+                                $cCont = $_POST["cruiseControl"];
+                                if ($cCont == 2) $cCont = 0;
+                                $radio = $_POST["radio"];
+                                if ($radio == 2) $radio = 0;
+                                $airCon = $_POST["airConditioning"];
+                                if ($airCon == 2) $airCon = 0;
+                                $bluetooth = $_POST["bluetooth"];
+                                if ($bluetooth == 2) $bluetooth = 0;
+                                $img = $model . ".png";
+
+                                $sql = "INSERT INTO vehicletype(brandName,model,pricePerDay,carImage)
+                                        VALUES ('$brand','$model','$pricePerDay','$image')";
+                                if (mysqli_query($conn, $sql)) {
+                                    $sql2 = "SELECT vehicleTypeID FROM vehicletype
+                                    ORDER BY vehicleTypeID DESC limit 1;";
+                                    $result = $conn->query($sql2);
+                                    while ($row = $result->fetch_assoc()) {
+                                        $vid = $row["vehicleTypeID"];
+                                        $sql3 = "INSERT INTO vehiclefeatures
+                                            VALUES ('$vid','$pYear','$size','$gear','$cCont','$radio','$airCon','$bluetooth')";
+                                        if (mysqli_query($conn, $sql3)) {
+                                            echo "<script>alert('New record has been added successfully !')</script>";
+                                            echo "<script> location.href='models.php'; </script>";
+                                        } else {
+                                            echo "<script>alert('An error has occured!')</script>";
+                                            echo "<script> location.href='models.php'; </script>";
+                                        }
+                                        mysqli_close($conn);
+                                        break;
+                                    }
+                                } else {
+                                    echo "<script>alert('An error has occured!')</script>";
+                                    echo "<script> location.href='models.php'; </script>";
+                                }
+                                mysqli_close($conn);
                             }
-                            mysqli_close($conn);
                         }
                     }
                 }

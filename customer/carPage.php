@@ -29,12 +29,13 @@ if (!isset($_SESSION)) {
     ?>
     <h2 style="text-align: center; margin-top: 130px; font-weight: 600">
         <?php while ($row = $result->fetch_assoc()) {
+            $row["carImage"] = "CARS".$row["carImage"];
             echo $row["brandName"] . " " . $row["model"];
         ?> </h2>
     <div class="flex-container">
         <div class="left-item">
             <?php
-            echo '<img src="../Images/Cars/' . $row["carImage"] . '" style="width:700px; height:auto; margin-left:160px">';
+            echo '<img src="../Images/' . $row["carImage"] . '" style="width:700px; height:auto; margin-left:160px">';
              ?>
         </div>
         <div class="right-item">

@@ -52,6 +52,7 @@ if (!isset($_SESSION)) {
         <div class="table" style="margin-bottom: 30px">
             <div class="table-header">
                 <div class="header__item">order ref</div>
+                <div class="header__item">city</div>
                 <div class="header__item">license plate</div>
                 <div class="header__item">date from</div>
                 <div class="header__item">date to</div>
@@ -61,11 +62,12 @@ if (!isset($_SESSION)) {
             <div class="table-content">
                 <?php
                 $date_now = date("Y-m-d");
-                $sql = "SELECT r.orderRef,c.licensePlate,r.dateFrom,r.dateTo,r.totalCost FROM reservation r,car c WHERE customerID=10003 AND r.carID=c.carID ORDER BY orderRef DESC;";
+                $sql = "SELECT r.orderRef,r.city,c.licensePlate,r.dateFrom,r.dateTo,r.totalCost FROM reservation r,car c WHERE customerID='$custID' AND r.carID=c.carID ORDER BY orderRef DESC;";
                 $result = $conn->query($sql);
                 while ($row = $result->fetch_assoc()) {
                     echo '<div class="table-row">
                         <div class="table-data">' . $row["orderRef"] . '</div>
+                        <div class="table-data">' . $row["city"] . '</div>
                         <div class="table-data">' . $row["licensePlate"] . '</div>
                  <div class="table-data">' . $row["dateFrom"] . '</div>
                  <div class="table-data">' . $row["dateTo"] . '</div>

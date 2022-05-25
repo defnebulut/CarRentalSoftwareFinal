@@ -58,6 +58,8 @@
                         <div class="header__item">customer id</div>
                         <div class="header__item">order ref</div>
                         <div class="header__item">car id</div>
+                        <div class="header__item">license plate</div>
+                        <div class="header__item">city</div>
                         <div class="header__item">date from</div>
                         <div class="header__item">date to</div>
                         <div class="header__item"></div>
@@ -65,13 +67,18 @@
                     <div class="table-content">
                         <?php
                         $date_now = date("Y-m-d");
-                        $sql = "SELECT * FROM reservation ORDER BY resDate ASC";
+                        $sql = "SELECT r.customerID,r.carID,r.orderRef,r.city,c.licensePlate,r.dateFrom,r.dateTo,r.totalCost 
+                        FROM reservation r,car c 
+                        WHERE r.carID=c.carID 
+                        ORDER BY resDate ASC;";
                         $result = $conn->query($sql);
                         while ($row = $result->fetch_assoc()) {
                             echo '<div class="table-row">
                             <div class="table-data">' . $row["customerID"] . '</div>
                             <div class="table-data">' . $row["orderRef"] . '</div>
                             <div class="table-data">' . $row["carID"] . '</div>
+                            <div class="table-data">' . $row["licensePlate"] . '</div>
+                            <div class="table-data">' . $row["city"] . '</div>
                             <div class="table-data">' . $row["dateFrom"] . '</div>
                             <div class="table-data">' . $row["dateTo"] . '</div>'; ?> <?php
                             if($date_now>$row["dateFrom"]){

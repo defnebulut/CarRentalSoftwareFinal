@@ -33,13 +33,14 @@ if (!isset($_SESSION)) {
     <br>
     <div class="row" id="ads">
       <?php while ($row = $result->fetch_assoc()) {
+        $row["carImage"] = "CARS" . $row["carImage"];
         echo '<div class="col-md-4" style="margin-bottom:30px;">
                 <div class="card rounded">
                   <div class="card-image">
                     <span class="card-notify-year">' . $row["productYear"] . '</span>
-                    <img src="../Images/Cars/' . $row["carImage"] . '" style="width:250px; height:auto; margin-left:50px;">';
-                    ?>
-        
+                    <img src="../Images/' . $row["carImage"] . '" style="width:250px; height:auto; margin-left:50px;">';
+      ?>
+
       <?php
         echo '</div>
                   <div class="card-image-overlay m-auto">

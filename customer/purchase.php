@@ -30,8 +30,7 @@ if (!isset($_SESSION)) {
             $dL = $_POST["dl"];
             $exp = $_POST["exp"];
             $cvv = $_POST["cvv"];
-
-            $sql = "INSERT INTO reservation (carID,customerID, dateFrom,dateTo,totalCost) VALUES ('$carid','$custID', '$pDate','$rDate','0')";
+            $sql = "INSERT INTO reservation (carID,customerID, dateFrom,dateTo,totalCost,city) VALUES ('$carid','$custID', '$pDate','$rDate','0','$carCity')";
             if (mysqli_query($conn, $sql)) {
                 echo "<script>alert('Reservation completed succesfuly !')</script>";
                 echo "<script> location.href='myReservations.php'; </script>";

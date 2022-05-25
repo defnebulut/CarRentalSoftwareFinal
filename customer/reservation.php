@@ -69,11 +69,12 @@ if (!isset($_SESSION)) {
                 WHERE vt.vehicleTypeID = vf.vehicleTypeID AND vt.vehicletypeID='$temp'";
                 $result = $conn->query($sql);
                 while ($row = $result->fetch_assoc()) {
+                    $row["carImage"] = "CARS" . $row["carImage"];
                     echo '<div class="col-md-4" style="margin-bottom:30px;">
                 <div class="card rounded">
                   <div class="card-image">
                     <span class="card-notify-year">' . $row["productYear"] . '</span>
-                     <img src="../Images/Cars/' . $row["carImage"] . '" style="width:250px; height:auto; margin-left:160px">'; ?>
+                     <img src="../Images/' . $row["carImage"] . '" style="width:250px; height:auto; margin-left:160px">'; ?>
 
             <?php
                     echo '</div>
