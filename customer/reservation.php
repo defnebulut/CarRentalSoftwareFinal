@@ -17,6 +17,12 @@ if (!isset($_SESSION)) {
 <body style="overflow-x: hidden;">
     <?php include "customerNavbar.php"; ?>
     <?php
+    $oRef = "";
+    if (isset($_SESSION["orderRef"])) {
+        if ($_SESSION["orderRef"] != "") {
+            $oRef = $_SESSION["orderRef"];
+        }
+    }
     $brand = $_SESSION["cBrand"];
     $size = $_SESSION["cSize"];
     $pDate = $_SESSION["pdate"];
@@ -55,7 +61,18 @@ if (!isset($_SESSION)) {
     <div class="container1">
         <div class="row" id="ads">
             <?php
-            $sqlC = "SELECT carID, vehicletypeID
+            if($oRef!=""){
+                $sqlC = "SELECT carID, vehicletypeID
+                FROM car
+                WHERE activationStatus=1 AND city='$carCity' AND carID NOT IN (
+                    SELECT CarID
+                    From reservation
+                    WHERE orderRef!='$oRef' AND (dateFrom BETWEEN DATE('$pDate') AND DATE('$rDate') OR 
+                    dateTo BETWEEN DATE('$pDate') AND DATE('$rDate') OR 
+                    $pDate BETWEEN DATE(dateFrom) AND DATE(dateTo) OR 
+                    $rDate BETWEEN DATE(dateFrom) AND DATE(dateTo))) ";
+            }else{
+                $sqlC = "SELECT carID, vehicletypeID
                 FROM car
                 WHERE activationStatus=1 AND city='$carCity' AND carID NOT IN (
                     SELECT CarID
@@ -64,6 +81,7 @@ if (!isset($_SESSION)) {
                     dateTo BETWEEN DATE('$pDate') AND DATE('$rDate') OR 
                     $pDate BETWEEN DATE(dateFrom) AND DATE(dateTo) OR 
                     $rDate BETWEEN DATE(dateFrom) AND DATE(dateTo)) ";
+            }
             if ($brand != "*") {
                 $sqlC .= " AND vehicleTypeID IN (SELECT vehicleTypeID
                         FROM vehicletype

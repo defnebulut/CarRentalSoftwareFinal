@@ -62,20 +62,20 @@ if (!isset($_SESSION)) {
                 $sameCars = "SELECT carID FROM car WHERE vehicleTypeID='$i' AND city='$carCity' AND carID NOT IN 
                 (SELECT carID
                     From reservation
-                    WHERE dateFrom BETWEEN DATE('$pDate') AND DATE('$rDate') OR 
+                    WHERE orderRef!='$oRef' AND (dateFrom BETWEEN DATE('$pDate') AND DATE('$rDate') OR 
                     dateTo BETWEEN DATE('$pDate') AND DATE('$rDate') OR 
                     $pDate BETWEEN DATE(dateFrom) AND DATE(dateTo) OR 
-                    $rDate BETWEEN DATE(dateFrom) AND DATE(dateTo))";
+                    $rDate BETWEEN DATE(dateFrom) AND DATE(dateTo)))";
                 $res = $conn->query($sameCars);
                 while ($roww = $res->fetch_assoc()) {
                     $carid = $roww["carID"];
-                    $checksql = "SELECT * FROM reservation WHERE carID='$carid' AND carID NOT IN 
+                    $checksql = "SELECT * FROM reservation WHERE carID='$carid' AND carID IN 
                     (SELECT carID
                         From reservation
-                        WHERE dateFrom BETWEEN DATE('$pDate') AND DATE('$rDate') OR 
+                        WHERE orderRef!='$oRef' AND (dateFrom BETWEEN DATE('$pDate') AND DATE('$rDate') OR 
                         dateTo BETWEEN DATE('$pDate') AND DATE('$rDate') OR 
                         $pDate BETWEEN DATE(dateFrom) AND DATE(dateTo) OR 
-                        $rDate BETWEEN DATE(dateFrom) AND DATE(dateTo))";
+                        $rDate BETWEEN DATE(dateFrom) AND DATE(dateTo)))";
                     $result = $conn->query($checksql);
                     if ($result->num_rows == 0) {
                         $sql = "UPDATE reservation
@@ -84,6 +84,7 @@ if (!isset($_SESSION)) {
                         if (mysqli_query($conn, $sql)) {
                             echo "<script>alert('Reservation updated succesfuly !')</script>";
                             unset($_SESSION["orderRef"]);
+                            $flag = 1;
                             echo "<script> location.href='myReservations.php'; </script>";
                         } else {
                             echo "<script>alert('An error has occured!')</script>";
@@ -110,7 +111,7 @@ if (!isset($_SESSION)) {
                 $res = $conn->query($sameCars);
                 while ($roww = $res->fetch_assoc()) {
                     $carid = $roww["carID"];
-                    $checksql = "SELECT * FROM reservation WHERE carID='$carid' AND carID NOT IN 
+                    $checksql = "SELECT * FROM reservation WHERE carID='$carid' AND carID IN 
                     (SELECT carID
                         From reservation
                         WHERE dateFrom BETWEEN DATE('$pDate') AND DATE('$rDate') OR 
