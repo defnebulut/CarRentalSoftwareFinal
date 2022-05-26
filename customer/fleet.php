@@ -23,7 +23,8 @@ if (!isset($_SESSION)) {
   <?php
   $sql = "SELECT vt.vehicletypeID,vt.brandName,vt.model,vt.pricePerDay,vt.carImage,vf.productYear
   FROM vehicletype vt, vehiclefeatures vf
-  WHERE vt.vehicleTypeID = vf.vehicleTypeID";
+  WHERE vt.vehicleTypeID = vf.vehicleTypeID
+  ORDER BY vt.brandName,vt.model";
   $result = $conn->query($sql);
   ?>
   <?php include "customerNavbar.php"; ?>

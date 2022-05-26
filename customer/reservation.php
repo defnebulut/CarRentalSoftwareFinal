@@ -17,6 +17,8 @@ if (!isset($_SESSION)) {
 <body style="overflow-x: hidden;">
     <?php include "customerNavbar.php"; ?>
     <?php
+    $brand = $_SESSION["cBrand"];
+    $size = $_SESSION["cSize"];
     $pDate = $_SESSION["pdate"];
     $rDate = $_SESSION["rdate"];
     $pDate1 = date_create($_SESSION["pdate"]);
@@ -59,8 +61,20 @@ if (!isset($_SESSION)) {
                     SELECT CarID
                     From reservation
                     WHERE dateFrom BETWEEN DATE('$pDate') AND DATE('$rDate') OR 
-                    dateTo BETWEEN DATE('$pDate') AND DATE('$rDate')) 
-                    GROUP BY vehicletypeID";
+                    dateTo BETWEEN DATE('$pDate') AND DATE('$rDate') OR 
+                    $pDate BETWEEN DATE(dateFrom) AND DATE(dateTo) OR 
+                    $rDate BETWEEN DATE(dateFrom) AND DATE(dateTo)) ";
+            if ($brand != "*") {
+                $sqlC .= " AND vehicleTypeID IN (SELECT vehicleTypeID
+                        FROM vehicletype
+                        WHERE brandName='$brand')";
+            }
+            if($size !="*"){
+                $sqlC .=" AND vehicleTypeID IN (SELECT vehicleTypeID
+                FROM vehiclefeatures
+                WHERE carSize='$size')";
+            }
+            $sqlC .= " GROUP BY vehicletypeID";
             $resultC = $conn->query($sqlC);
             while ($rowC = $resultC->fetch_assoc()) {
                 $temp = $rowC["vehicletypeID"];

@@ -16,15 +16,15 @@ if (!isset($_SESSION)) {
 <body>
     <?php include "dbConfig.php" ?>
     <?php
-    $pdate = $rdate = $location = "";
+    $brand = $size = $pdate = $rdate = $location = "";
     if ($_SERVER["REQUEST_METHOD"] && isset($_POST['submit_1'])) {
         $pdate = test_input($_POST["pdate"]);
         $rdate = test_input($_POST["rdate"]);
         $location = test_input($_POST["city"]);
+        $brand = test_input($_POST["brand"]);
+        $size = test_input($_POST["size"]);
         $date_now = date("Y-m-d");
-        if ($location == "--- Choose a city ---") {
-            echo "<script>alert('Please select a city!')</script>";
-        } else if ($pdate > $rdate) {
+        if ($pdate > $rdate) {
             echo "<script>alert('Return date must be greater than pick-up date!')</script>";
         } else if ($pdate < $date_now) {
             echo "<script>alert('Pick up date must be greater than today!')</script>";
@@ -36,6 +36,8 @@ if (!isset($_SESSION)) {
                 $_SESSION["pdate"] = $pdate;
                 $_SESSION["rdate"] = $rdate;
                 $_SESSION["location"] = $location;
+                $_SESSION["cBrand"] = $brand;
+                $_SESSION["cSize"] = $size;
                 echo "<script> location.href='reservation.php'; </script>";
             }
         }
@@ -51,13 +53,13 @@ if (!isset($_SESSION)) {
     ?>
     <?php include "customerNavbar.php"; ?>
     <div class="bg-img">
-        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" class="container" id="h-form">
+        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" class="container" id="h-form" style="top:115px">
             <label for="location" style="font-size: 22px;color: rgb(48, 0, 0);" id="prl"><b>Pick-up&Return
                     Location*</b></label>
-            <select name="city" id="city">
+            <select name="city" id="city" style="margin-bottom:5px ;">
                 <script>
                     const cities = [
-                        '--- Choose a city ---', 'Istanbul', 'Ankara', 'Izmir', 'Antalya', 'Bursa', 'Eskisehir'
+                        'Istanbul', 'Ankara', 'Izmir', 'Antalya', 'Bursa', 'Eskisehir'
                     ]
                     var select = document.getElementById('city');
                     for (var i = 0; i < cities.length; i++) {
@@ -74,7 +76,7 @@ if (!isset($_SESSION)) {
                         <div class="col-sm-6 col-md-6">
                             <label class="coc-block-label" for="pdate" id="pdate"><b>Pick-up Date*</b></label>
                             <div class="coc-block">
-                                <input class="coc-input" type="date" name="pdate" id="pdate" required />
+                                <input class="coc-input" type="date" name="pdate" id="pdate" required style="margin-bottom:5px ;" />
                             </div>
                             <label class="coc-block-label" for="rdate" id="rdatel"><b>Return Date*</b></label>
                             <div class="coc-block">
@@ -82,6 +84,24 @@ if (!isset($_SESSION)) {
                             </div>
                         </div>
                         <div class="col-6 col-md-6">
+                        <label for="location" style="font-size: 22px;color: rgb(48, 0, 0);" id="prl"><b>Brand</b></label>
+                            <select name="brand">
+                                <option value="*">All Brands</option>
+                                <?php
+                                $sql = "SELECT brandName FROM vehiclebrand ORDER BY brandName";
+                                $result = $conn->query($sql);
+                                while ($row = $result->fetch_assoc()) {
+                                    echo '<option value="' . $row["brandName"] . '">' . $row["brandName"] . '</option>';
+                                }
+                                ?>
+                            </select>
+                            <label for="location" style="font-size: 22px;color: rgb(48, 0, 0);" id="prl"><b>Size</b></label>
+                            <select name="size" id="size">
+                                <option value="*">All Sizes</option>
+                                <option value="small">Small</option>
+                                <option value="medium">Medium</option>
+                                <option value="large">Large</option>
+                            </select>
                             <input type="submit" name="submit_1" value="SEARCH" class="sear-btn ">
                         </div>
                     </div>

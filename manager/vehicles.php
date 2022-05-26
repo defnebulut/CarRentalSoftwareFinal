@@ -119,6 +119,7 @@
                         <div class="table" style="margin-bottom: 30%;">
                             <div class="table-header">
                                 <div class="header__item">license plate</div>
+                                <div class="header__item">city</div>
                                 <div class="header__item">car id</div>
                                 <div class="header__item">brand</div>
                                 <div class="header__item">model</div>
@@ -127,7 +128,7 @@
                             </div>
                             <div class="table-content">
                                 <?php
-                                $sql = "SELECT c.licensePlate,c.carID,v.brandName,v.model,c.activationStatus,v.pricePerDay 
+                                $sql = "SELECT c.licensePlate,c.carID,c.city,v.brandName,v.model,c.activationStatus,v.pricePerDay 
                                 FROM car c,vehicletype v 
                                 WHERE c.vehicletypeID=v.vehicletypeID 
                                 ORDER BY v.brandName,v.model,c.carID;";
@@ -139,6 +140,7 @@
                                     }
                                     echo '<div class="table-row">
                             <div class="table-data">' . $row["licensePlate"] . '</div>
+                            <div class="table-data">' . $row["city"] . '</div>
                             <div class="table-data">' . $row["carID"] . '</div>
                             <div class="table-data">' . $row["brandName"] . '</div>
                             <div class="table-data">' . $row["model"] . '</div>
