@@ -61,7 +61,7 @@ if (!isset($_SESSION)) {
             <select name="city" id="city">
                 <script>
                     const cities = [
-                        '--- Choose a city ---', 'Istanbul', 'Ankara', 'Izmir', 'Antalya', 'Bursa', 'Eskisehir'
+                        'Istanbul', 'Ankara', 'Izmir', 'Antalya', 'Bursa', 'Eskisehir'
                     ]
                     var select = document.getElementById('city');
                     for (var i = 0; i < cities.length; i++) {

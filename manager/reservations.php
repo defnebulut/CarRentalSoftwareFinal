@@ -70,7 +70,7 @@
                         $sql = "SELECT r.customerID,r.carID,r.orderRef,r.city,c.licensePlate,r.dateFrom,r.dateTo,r.totalCost 
                         FROM reservation r,car c 
                         WHERE r.carID=c.carID 
-                        ORDER BY resDate ASC;";
+                        ORDER BY resDate DESC;";
                         $result = $conn->query($sql);
                         while ($row = $result->fetch_assoc()) {
                             echo '<div class="table-row">

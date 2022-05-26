@@ -30,6 +30,27 @@ if (!isset($_SESSION)) {
     $rDate = $_SESSION["rdate"];
     $custID = $_SESSION["customerID"];
     $name = $dL = $cN = $exp = $cvv = "";
+    $costQuery1 = "SELECT vehicleTypeID 
+    FROM car
+    WHERE carID='$carid'";
+    $result = $conn->query($costQuery1);
+    while ($row = $result->fetch_assoc()) {
+        $i = $row["vehicleTypeID"];
+    }
+    $costQuery2 = "SELECT pricePerDay
+    FROM vehicleType
+    WHERE vehicleTypeID='$i'";
+    $result = $conn->query($costQuery2);
+    while ($row = $result->fetch_assoc()) {
+        $cost = $row["pricePerDay"];
+    }
+    $dateQuery = "SELECT DATEDIFF ('$rDate','$pDate') AS DateDiff";
+    $result = $conn->query($dateQuery);
+    while ($row = $result->fetch_assoc()) {
+        $daycount = $row["DateDiff"];
+    }
+    $daycount += 1;
+    $totalCost = $daycount * $cost;
     if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit_6'])) {
         if (isset($_POST['submit_6'])) {
             $name = $_POST["name"];
@@ -37,29 +58,83 @@ if (!isset($_SESSION)) {
             $exp = $_POST["exp"];
             $cvv = $_POST["cvv"];
             if ($oRef != "") {
-                $sql = "UPDATE reservation
-                SET carID='$carid', customerID='$custID',dateFrom='$pDate',dateTo='$rDate',totalCost=0,city='$carCity'
+                $flag = 0;
+                $sameCars = "SELECT carID FROM car WHERE vehicleTypeID='$i' AND city='$carCity' AND carID NOT IN 
+                (SELECT carID
+                    From reservation
+                    WHERE dateFrom BETWEEN DATE('$pDate') AND DATE('$rDate') OR 
+                    dateTo BETWEEN DATE('$pDate') AND DATE('$rDate') OR 
+                    $pDate BETWEEN DATE(dateFrom) AND DATE(dateTo) OR 
+                    $rDate BETWEEN DATE(dateFrom) AND DATE(dateTo))";
+                $res = $conn->query($sameCars);
+                while ($roww = $res->fetch_assoc()) {
+                    $carid = $roww["carID"];
+                    $checksql = "SELECT * FROM reservation WHERE carID='$carid' AND carID NOT IN 
+                    (SELECT carID
+                        From reservation
+                        WHERE dateFrom BETWEEN DATE('$pDate') AND DATE('$rDate') OR 
+                        dateTo BETWEEN DATE('$pDate') AND DATE('$rDate') OR 
+                        $pDate BETWEEN DATE(dateFrom) AND DATE(dateTo) OR 
+                        $rDate BETWEEN DATE(dateFrom) AND DATE(dateTo))";
+                    $result = $conn->query($checksql);
+                    if ($result->num_rows == 0) {
+                        $sql = "UPDATE reservation
+                SET carID='$carid', customerID='$custID',dateFrom='$pDate',dateTo='$rDate',totalCost='$totalCost',city='$carCity'
                 WHERE orderRef='$oRef'";
-                if (mysqli_query($conn, $sql)) {
-                    echo "<script>alert('Reservation updated succesfuly !')</script>";
-                    unset($_SESSION["orderRef"]);
-                    echo "<script> location.href='myReservations.php'; </script>";
-                } else {
+                        if (mysqli_query($conn, $sql)) {
+                            echo "<script>alert('Reservation updated succesfuly !')</script>";
+                            unset($_SESSION["orderRef"]);
+                            echo "<script> location.href='myReservations.php'; </script>";
+                        } else {
+                            echo "<script>alert('An error has occured!')</script>";
+                            unset($_SESSION["orderRef"]);
+                            echo "<script> location.href='customerMain.php'; </script>";
+                        }
+                        mysqli_close($conn);
+                    }
+                }
+                if ($flag == 0) {
                     echo "<script>alert('An error has occured!')</script>";
                     unset($_SESSION["orderRef"]);
                     echo "<script> location.href='customerMain.php'; </script>";
                 }
-                mysqli_close($conn);
             } else {
-                $sql = "INSERT INTO reservation (carID,customerID, dateFrom,dateTo,totalCost,city) VALUES ('$carid','$custID', '$pDate','$rDate','0','$carCity')";
-                if (mysqli_query($conn, $sql)) {
-                    echo "<script>alert('Reservation completed succesfuly !')</script>";
-                    echo "<script> location.href='myReservations.php'; </script>";
-                } else {
+                $flag = 0;
+                $sameCars = "SELECT carID FROM car WHERE vehicleTypeID='$i' AND city='$carCity' AND carID NOT IN 
+                (SELECT carID
+                    From reservation
+                    WHERE dateFrom BETWEEN DATE('$pDate') AND DATE('$rDate') OR 
+                    dateTo BETWEEN DATE('$pDate') AND DATE('$rDate') OR 
+                    $pDate BETWEEN DATE(dateFrom) AND DATE(dateTo) OR 
+                    $rDate BETWEEN DATE(dateFrom) AND DATE(dateTo))";
+                $res = $conn->query($sameCars);
+                while ($roww = $res->fetch_assoc()) {
+                    $carid = $roww["carID"];
+                    $checksql = "SELECT * FROM reservation WHERE carID='$carid' AND carID NOT IN 
+                    (SELECT carID
+                        From reservation
+                        WHERE dateFrom BETWEEN DATE('$pDate') AND DATE('$rDate') OR 
+                        dateTo BETWEEN DATE('$pDate') AND DATE('$rDate') OR 
+                        $pDate BETWEEN DATE(dateFrom) AND DATE(dateTo) OR 
+                        $rDate BETWEEN DATE(dateFrom) AND DATE(dateTo))";
+                    $result = $conn->query($checksql);
+                    if ($result->num_rows == 0) {
+                        $sql = "INSERT INTO reservation (carID,customerID, dateFrom,dateTo,totalCost,city) VALUES ('$carid','$custID', '$pDate','$rDate','$totalCost','$carCity')";
+                        if (mysqli_query($conn, $sql)) {
+                            echo "<script>alert('Reservation completed succesfuly !')</script>";
+                            $flag = 1;
+                            echo "<script> location.href='myReservations.php'; </script>";
+                        } else {
+                            echo "<script>alert('An error has occured!')</script>";
+                            echo "<script> location.href='customerMain.php'; </script>";
+                        }
+                        mysqli_close($conn);
+                    }
+                }
+                if ($flag == 0) {
                     echo "<script>alert('An error has occured!')</script>";
                     echo "<script> location.href='customerMain.php'; </script>";
                 }
-                mysqli_close($conn);
             }
         }
     }
@@ -119,7 +194,7 @@ if (!isset($_SESSION)) {
                         <input class="form-control mb-3 pt-2" name="cvv" type="text-i" placeholder="***" required />
                     </div>
                 </div>
-                <input type="submit" name="submit_6" value="PAY $0" class="sear-btn" style="margin-top:50px">
+                <input type="submit" name="submit_6" value="PAY $<?php echo "$totalCost" ?>" class="sear-btn" style="margin-top:50px">
             </form>
         </div>
     </div>

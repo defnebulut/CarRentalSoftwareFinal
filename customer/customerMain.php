@@ -2,6 +2,9 @@
 if (!isset($_SESSION)) {
     session_start();
 }
+if(isset($_SESSION["orderRef"])){
+    unset($_SESSION["orderRef"]);
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
