@@ -13,10 +13,16 @@
     <?php
     $orderRef = $_GET["id"];
     $sql = "DELETE FROM reservation WHERE orderRef='$orderRef'";
-    $result = $conn->query($sql);
     if (mysqli_query($conn, $sql)) {
-        echo "<script>alert('Record deleted succesfully!')</script>";
-        echo "<script> location.href='reservations.php'; </script>";
+        $sql2 = "DELETE FROM customerpayment WHERE orderRef='$orderRef'";
+        if (mysqli_query($conn, $sql2)) {
+            echo "<script>alert('Reservation cancelled succesfully!')</script>";
+            echo "<script> location.href='myReservations.php'; </script>";
+        } else {
+            echo "<script>alert('An error has occured!')</script>";
+            echo "<script> location.href='myReservations.php'; </script>";
+        }
+        mysqli_close($conn);
     } else {
         echo "<script>alert('An error has occured!')</script>";
         echo "<script> location.href='reservations.php'; </script>";

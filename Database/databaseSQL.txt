@@ -33,17 +33,10 @@ CREATE TABLE Manager(
 
 CREATE TABLE customerPayment(
     customerID INT,
-    cardNumber VARCHAR(16),
-    saveName VARCHAR(15),
-    expMonth INT(2),
-    expYear INT(4),
-    cvv INT(3),
-    PRIMARY KEY (customerID, cardNumber),
-    UNIQUE(customerID,saveName),
-    FOREIGN KEY (customerID)
-    REFERENCES customer(customerID)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE
+    cardNumber VARCHAR(255),
+    orderRef INT,
+    nameSurname VARCHAR(50),
+    cost INT
 )
 
 
