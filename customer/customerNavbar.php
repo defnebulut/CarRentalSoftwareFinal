@@ -60,6 +60,7 @@ if (!isset($_SESSION)) {
                         <ul class="dropdown-menu dropdown-menu-lg-end" style="width: 90%; margin-right: 40px;">
                             <li><a class="dropdown-item" href="cAccountSettings.php">Account Settings</a></li>
                             <li><a class="dropdown-item" href="myReservations.php">My Reservations</a></li>
+                            <li><a class="dropdown-item" href="myPayments.php">My Payments</a></li>
                             <li><a class="dropdown-item">
                                     <?php
                                     echo '<a href="logOut.php?login=0" style="color:black;">
