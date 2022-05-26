@@ -58,6 +58,7 @@ if (!isset($_SESSION)) {
                 <div class="header__item">date to</div>
                 <div class="header__item">cost</div>
                 <div class="header__item"></div>
+                <div class="header__item"></div>
             </div>
             <div class="table-content">
                 <?php
@@ -75,10 +76,13 @@ if (!isset($_SESSION)) {
                  if($date_now>$row["dateFrom"]){
                     echo '
                     <div class="table-data"><a class="ad-btn2" disabled style="color:whitesmoke">Cancel</a></div>
+                    <div class="table-data"><a class="ad-btn2" disabled style="color:whitesmoke">Update</a></div>
                     </div>';
                  }else{
                     echo '
                     <div class="table-data"><a class="ad-btn2" href="cancelRes.php?id=' . $row["orderRef"] . '">Cancel</a></div>
+                    <div class="table-data"><a class="ad-btn2" href="updateRes.php?id=' . $row["orderRef"] . '">update</a></div>
+                    
                     </div>';
                  }
                 }

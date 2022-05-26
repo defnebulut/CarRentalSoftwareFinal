@@ -15,9 +15,6 @@ if (!isset($_SESSION)) {
 
 <body>
     <?php include "dbConfig.php" ?>
-    <script>
-        alert(<?php $_GET["id"] ?>);
-    </script>
     <?php
     $_SESSION["orderRef"] = $_GET["id"];
     echo "<script> location.href='uReservation.php'; </script>";

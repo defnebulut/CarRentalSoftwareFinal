@@ -18,6 +18,12 @@ if (!isset($_SESSION)) {
     <?php include "customerNavbar.php"; ?>
     <?php include "dbConfig.php" ?>
     <?php
+    $oRef = "";
+    if (isset($_SESSION["orderRef"])) {
+        if ($_SESSION["orderRef"] != "") {
+            $oRef = $_SESSION["orderRef"];
+        }
+    }
     $carid = $_SESSION["carID"];
     $carCity = $_SESSION["location"];
     $pDate = $_SESSION["pdate"];
@@ -30,15 +36,31 @@ if (!isset($_SESSION)) {
             $dL = $_POST["dl"];
             $exp = $_POST["exp"];
             $cvv = $_POST["cvv"];
-            $sql = "INSERT INTO reservation (carID,customerID, dateFrom,dateTo,totalCost,city) VALUES ('$carid','$custID', '$pDate','$rDate','0','$carCity')";
-            if (mysqli_query($conn, $sql)) {
-                echo "<script>alert('Reservation completed succesfuly !')</script>";
-                echo "<script> location.href='myReservations.php'; </script>";
+            if ($oRef != "") {
+                $sql = "UPDATE reservation
+                SET carID='$carid', customerID='$custID',dateFrom='$pDate',dateTo='$rDate',totalCost=0,city='$carCity'
+                WHERE orderRef='$oRef'";
+                if (mysqli_query($conn, $sql)) {
+                    echo "<script>alert('Reservation updated succesfuly !')</script>";
+                    unset($_SESSION["orderRef"]);
+                    echo "<script> location.href='myReservations.php'; </script>";
+                } else {
+                    echo "<script>alert('An error has occured!')</script>";
+                    unset($_SESSION["orderRef"]);
+                    echo "<script> location.href='customerMain.php'; </script>";
+                }
+                mysqli_close($conn);
             } else {
-                echo "<script>alert('An error has occured!')</script>";
-                echo "<script> location.href='customerMain.php'; </script>";
+                $sql = "INSERT INTO reservation (carID,customerID, dateFrom,dateTo,totalCost,city) VALUES ('$carid','$custID', '$pDate','$rDate','0','$carCity')";
+                if (mysqli_query($conn, $sql)) {
+                    echo "<script>alert('Reservation completed succesfuly !')</script>";
+                    echo "<script> location.href='myReservations.php'; </script>";
+                } else {
+                    echo "<script>alert('An error has occured!')</script>";
+                    echo "<script> location.href='customerMain.php'; </script>";
+                }
+                mysqli_close($conn);
             }
-            mysqli_close($conn);
         }
     }
     ?>
