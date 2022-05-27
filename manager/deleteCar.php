@@ -29,12 +29,22 @@
                     echo "<script> location.href='vehicles.php'; </script>";
                 }
                 mysqli_close($conn);
-            }else{
+            } else {
                 echo "<script>alert('An error has occured!')</script>";
                 echo "<script> location.href='vehicles.php'; </script>";
             }
             mysqli_close($conn);
         }
+    } else {
+        $sql = "DELETE FROM car WHERE carID='$carID'";
+        if (mysqli_query($conn, $sql)) {
+            echo "<script>alert('Record deleted succesfully!')</script>";
+            echo "<script> location.href='vehicles.php'; </script>";
+        } else {
+            echo "<script>alert('An error has occured!')</script>";
+            echo "<script> location.href='vehicles.php'; </script>";
+        }
+        mysqli_close($conn);
     }
     ?>
 </body>
