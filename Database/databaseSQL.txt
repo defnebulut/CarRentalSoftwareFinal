@@ -34,9 +34,14 @@ CREATE TABLE Manager(
 CREATE TABLE customerPayment(
     customerID INT,
     cardNumber VARCHAR(255),
-    orderRef INT,
+    orderRef INT PRIMARY KEY,
+    ord INT,
     nameSurname VARCHAR(50),
-    cost INT
+    cost INT,
+    FOREIGN KEY(ord)
+    REFERENCES reservation(orderRef)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
 )
 
 

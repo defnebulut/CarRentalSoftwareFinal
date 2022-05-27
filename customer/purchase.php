@@ -141,8 +141,8 @@ if (!isset($_SESSION)) {
                             while ($row22 = $r->fetch_assoc()) {
                                 $o = $row22["orderRef"];
                             }
-                            $insSql = "INSERT INTO customerpayment(customerID,cardNumber,orderRef,nameSurname,cost)
-                            VALUES ('$custID','$cardNum','$o','$name','$totalCost')";
+                            $insSql = "INSERT INTO customerpayment(customerID,cardNumber,orderRef,ord,nameSurname,cost)
+                            VALUES ('$custID','$cardNum','$o','$o','$name','$totalCost')";
                             if (mysqli_query($conn, $insSql)) {
                                 echo "<script>alert('Reservation completed succesfuly !')</script>";
                                 unset($_SESSION["orderRef"]);
