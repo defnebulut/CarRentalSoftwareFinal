@@ -15,6 +15,7 @@
         <a class="mang-menu" href="models.php">Models</a>
         <a class="mang-menu" href="carRes.php">Cars & Reservations</a>
         <a class="mang-menu" href="cusRes.php">Customers & Reservations</a>
+        <a class="mang-menu" href="inServiceCars.php">Cars in Repair</a>
     </div>
 </body>
 </html>
