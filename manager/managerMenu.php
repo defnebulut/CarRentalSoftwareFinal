@@ -13,6 +13,8 @@
         <a class="mang-menu" href="reservations.php">Reservations</a>
         <a class="mang-menu" href="vehicles.php">Vehicles</a>
         <a class="mang-menu" href="models.php">Models</a>
+        <a class="mang-menu" href="carRes.php">Cars & Reservations</a>
+        <a class="mang-menu" href="cusRes.php">Customers & Reservations</a>
     </div>
 </body>
 </html>

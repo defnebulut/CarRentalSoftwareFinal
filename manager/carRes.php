@@ -11,7 +11,7 @@ if (!isset($_SESSION)) {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/main.css" />
-    <title>City Reservations</title>
+    <title>Cars & Reservations</title>
     <style>
         .ad-btn2 {
             text-transform: uppercase;
@@ -48,20 +48,19 @@ if (!isset($_SESSION)) {
         <div class="col-6 col-md-2" style="background-color:  #8f92962f; display: inline;">
             <?php include "managerMenu.php"; ?>
         </div>
-
         <?php
-        $cityQuery = $city =  "";
-        if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit11'])) {
-            $city = test_input($_POST["city"]);
-            if($city=="*"){
-                $cityQuery="";
+        $modelQuery = $model =  "";
+        if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit212'])) {
+            $model = test_input($_POST["brand"]);
+            if($model=="*"){
+                $modelQuery="";
             }else{
-                $cityQuery =" AND r.city='$city'";
+                $modelQuery =" AND c.vehicleTypeID='$model'";
             }
-            if (isset($_POST['submit11'])) {
-                $city = $_POST["city"];
-                $_SESSION["query"]=$cityQuery;
-                echo "<script> location.href='reservations.php'; </script>";
+            if (isset($_POST['submit212'])) {
+                $model = $_POST["brand"];
+                $_SESSION["query2"]=$modelQuery;
+                echo "<script> location.href='carRes.php'; </script>";
             }
         }
         function test_input($data)
@@ -73,23 +72,25 @@ if (!isset($_SESSION)) {
         }
         ?>
         <div class="col-sm-6 col-md-8">
-            <h2 style="text-align: center; margin:100px 0 40px 0">RESERVATIONS</h2>
+            <h2 style="text-align: center; margin:100px 0 40px 0">MODELS & RESERVATIONS</h2>
             <div class="container">
                 <div class="row">
                     <div class="col-8" style="margin-bottom:10px">
                         <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-                            <label class="form-label" for="City" style="margin-top: 8px; margin-left:40px; font-size:larger">City*</label>
+                            <label class="form-label" for="brandModel" style="margin-top: 8px; margin-left:40px;font-size:larger">Brand&Model*</label>
                             <br>
-                            <select name="city" id="city" style="margin-left: 40px">
+                            <select name="brand" style="margin-left:40px">
                                 <option value="*">All</option>
-                                <option value="Istanbul">Istanbul</option>
-                                <option value="Ankara">Ankara</option>
-                                <option value="Izmir">Izmir</option>
-                                <option value="Antalya">Antalya</option>
-                                <option value="Bursa">Bursa</option>
-                                <option value="Eskisehir">Eskisehir</option>
+                                <?php
+                                $sql = "SELECT vehicletypeID,brandName,model FROM vehicletype ORDER BY brandName,model";
+                                $result = $conn->query($sql);
+                                while ($row = $result->fetch_assoc()) {
+                                    echo '<option value="' . $row["vehicletypeID"] . '">' . $row["brandName"] . " - " . $row["model"] . '</option>';
+                                    $i++;
+                                }
+                                ?>
                             </select>
-                            <input type="submit" name="submit11" value="SEARCH">
+                            <input type="submit" name="submit212" value="SEARCH">
                         </form>
                     </div>
                     <div class="container1" style="margin-top: 5%;">
@@ -110,10 +111,10 @@ if (!isset($_SESSION)) {
                                 $sql = "SELECT r.customerID,r.carID,r.orderRef,r.city,c.licensePlate,r.dateFrom,r.dateTo,r.totalCost 
                         FROM reservation r,car c 
                         WHERE r.carID=c.carID";
-                        if(isset($_SESSION["query"])){
-                            $sql .= $_SESSION["query"];
-                        }
-                        $sql .= " ORDER BY resDate DESC;";
+                                if (isset($_SESSION["query2"])) {
+                                    $sql .= $_SESSION["query2"];
+                                }
+                                $sql .= " ORDER BY resDate DESC;";
                                 $result = $conn->query($sql);
                                 while ($row = $result->fetch_assoc()) {
                                     echo '<div class="table-row">
@@ -134,15 +135,14 @@ if (!isset($_SESSION)) {
                                </div>';
                                                                                         }
                                                                                     }
-                                                                                        ?>
+                                                                                        
+                                ?>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
-
         <div class="col-6 col-md-2" style="background-color:  #8f92962f; display: inline;">
             <?php include "managerMenu2.php"; ?>
         </div>
