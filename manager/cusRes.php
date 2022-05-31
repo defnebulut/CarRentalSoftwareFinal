@@ -1,4 +1,7 @@
 <?php
+
+use LDAP\Result;
+
 if (!isset($_SESSION)) {
     session_start();
 }
@@ -55,6 +58,13 @@ if (!isset($_SESSION)) {
             if($customer==""){
                 $customerQuery="";
             }else{
+                $sql="SELECT customerID FROM customer WHERE customerID='$customer'";
+                $result = $conn->query($sql);
+                if($result->num_rows==0){
+                    $customerQuery="";
+                    echo"<script> alert('No such user exist!'); </script>";
+                    echo"<script> location.href='cusRes.php'; </script>";
+                }
                 $customerQuery =" AND r.customerID='$customer'";
             }
             if (isset($_POST['submit21'])) {
@@ -110,11 +120,6 @@ if (!isset($_SESSION)) {
                                 }
                                 $sql .= " ORDER BY resDate DESC;";
                                 $result = $conn->query($sql);
-                                if ($result->num_rows == 0) {
-                                    echo "<script>alert('No such user exists!')</script>";
-                                    $_SESSION["query3"]="";
-                                    echo "<script> location.href='cusRes.php'; </script>";
-                                }
                                 while ($row = $result->fetch_assoc()) {
                                     echo '<div class="table-row">
                             <div class="table-data">' . $row["customerID"] . '</div>
